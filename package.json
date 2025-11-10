@@ -1,6 +1,6 @@
 {
   "name": "ryu-ts",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "A lightweight TypeScript-first validation library inspired by Zod.",
   "author": "Abdul Rafay Aslam",
   "license": "MIT",
@@ -8,7 +8,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rm -rf dist",
     "build": "bun run clean && tsc",
@@ -26,5 +28,12 @@
   "peerDependencies": {
     "typescript": "^5"
   },
-  "keywords": ["validation", "schema", "typescript", "zod", "bun", "ryu"]
+  "keywords": [
+    "validation",
+    "schema",
+    "typescript",
+    "zod",
+    "bun",
+    "ryu"
+  ]
 }
