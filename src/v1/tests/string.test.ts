@@ -65,22 +65,22 @@ describe("RyuString Schema", () => {
   // Constraints test
   test("Should throw when using min() after length()", () => {
     const schema = ryu.string().length(3);
-    expect(() => schema.min(2)).toThrow("Cannot use min() when a fixed length() has already been set.");
+    expect(() => (schema as any).min(2)).toThrow("Cannot use min() when a fixed length() has already been set.");
   });
 
   test("Should throw when using max() after length()", () => {
     const schema = ryu.string().length(3);
-    expect(() => schema.max(10)).toThrow("Cannot use max() when a fixed length() has already been set.");
+    expect(() => (schema as any).max(10)).toThrow("Cannot use max() when a fixed length() has already been set.");
   });
 
   test("Should throw when using length() after min()", () => {
     const schema = ryu.string().min(3);
-    expect(() => schema.length(5)).toThrow("Cannot use length() when min() or max() has already been set.");
+    expect(() => (schema as any).length(5)).toThrow("Cannot use length() when min() or max() has already been set.");
   });
 
   test("Should throw when using length() after max()", () => {
     const schema = ryu.string().max(5);
-    expect(() => schema.length(3)).toThrow("Cannot use length() when min() or max() has already been set.");
+    expect(() => (schema as any).length(3)).toThrow("Cannot use length() when min() or max() has already been set.");
   });
 
   // Combined Constraints
