@@ -16,7 +16,7 @@ pnpm add ryu-ts
 
 ## Usage
 
-```bash
+```ts
 import { ryu } from "ryu-ts";
 
 // Define a schema
@@ -37,7 +37,7 @@ console.log(result);
 
 ## Handling Validation Errors
 
-```bash
+```ts
 schema.parse({ name: "Ra" });
 // Error: String is too short (min 3)
 ```

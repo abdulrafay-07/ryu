@@ -19,6 +19,8 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
   private _max?: { val?: number; errorMsg: string; };
   private _length?: { val?: number; errorMsg: string; };
   private _includes?: { val?: string; errorMsg: string };
+  private _startsWith?: { val?: string; errorMsg: string };
+  private _endsWith?: { val?: string; errorMsg: string };
 
   // Compile time type signatures
 
@@ -144,7 +146,55 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
     this._includes.val = val;
     errorMsg
       ? this._includes.errorMsg = errorMsg
-      : this._includes.errorMsg = `String must include ${this._includes.val}`
+      : this._includes.errorMsg = `String must include ${this._includes.val}`;
+
+    return this;
+  };
+
+  /**
+    * Adds a constraint that requires the string to **start with** a specific substring.
+    *
+    * @param val - The substring that the string must start with.
+    * @param errorMsg - Optional custom error message if the string does not start with `val`.
+    * @returns The current instance of `RyuString` for chaining.
+    *
+    * @example
+    * ```ts
+    * const schema = ryu.string().startsWith("Hello");
+    * schema.parse("World"); // Error: String must start with Hello
+    * ```
+    */
+  startsWith(val: string, errorMsg?: string) {
+    if (!this._startsWith) this._startsWith = { errorMsg: "" };
+
+    this._startsWith.val = val;
+    errorMsg
+      ? this._startsWith.errorMsg = errorMsg
+      : this._startsWith.errorMsg = `String must start with ${this._startsWith.val}`;
+
+    return this;
+  };
+
+  /**
+    * Adds a constraint that requires the string to **end with** a specific substring.
+    *
+    * @param val - The substring that the string must end with.
+    * @param errorMsg - Optional custom error message if the string does not end with `val`.
+    * @returns The current instance of `RyuString` for chaining.
+    *
+    * @example
+    * ```ts
+    * const schema = ryu.string().endsWith("World");
+    * schema.parse("Hello"); // Error: String must end with World
+    * ```
+    */
+  endsWith(val: string, errorMsg?: string) {
+    if (!this._endsWith) this._endsWith = { errorMsg: "" };
+
+    this._endsWith.val = val;
+    errorMsg
+      ? this._endsWith.errorMsg = errorMsg
+      : this._endsWith.errorMsg = `String must end with ${this._endsWith.val}`;
 
     return this;
   };
@@ -177,6 +227,8 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
     if (this._max && data.length > this._max.val!) throw new Error(this._max.errorMsg);
     if (this._length && data.length !== this._length.val) throw new Error(this._length.errorMsg);
     if (this._includes && !data.includes(this._includes.val!)) throw new Error(this._includes.errorMsg);
+    if (this._startsWith && !data.startsWith(this._startsWith.val!)) throw new Error(this._startsWith.errorMsg);
+    if (this._endsWith && !data.endsWith(this._endsWith.val!)) throw new Error(this._endsWith.errorMsg);
 
     return data;
   };

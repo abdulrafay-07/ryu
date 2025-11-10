@@ -62,6 +62,54 @@ describe("RyuString Schema", () => {
     expect(() => schema.parse("abcd")).toThrow("Wrong length!");
   });
 
+  // includes tests
+  test("Should throw error if string does not include specified substring", () => {
+    const schema = ryu.string().includes("abc");
+    expect(() => schema.parse("xyz")).toThrow("String must include abc");
+  });
+
+  test("Should pass if string includes specified substring", () => {
+    const schema = ryu.string().includes("abc");
+    expect(schema.parse("xyzabcxyz")).toBe("xyzabcxyz");
+  });
+
+  test("Should use custom error message for includes()", () => {
+    const schema = ryu.string().includes("abc", "Missing abc!");
+    expect(() => schema.parse("xyz")).toThrow("Missing abc!");
+  });
+
+  // startsWith tests
+  test("Should throw error if string does not start with specified substring", () => {
+    const schema = ryu.string().startsWith("Hello");
+    expect(() => schema.parse("WorldHello")).toThrow("String must start with Hello");
+  });
+
+  test("Should pass if string starts with specified substring", () => {
+    const schema = ryu.string().startsWith("Hello");
+    expect(schema.parse("HelloWorld")).toBe("HelloWorld");
+  });
+
+  test("Should use custom error message for startsWith()", () => {
+    const schema = ryu.string().startsWith("Hi", "Must start with Hi!");
+    expect(() => schema.parse("Hello")).toThrow("Must start with Hi!");
+  });
+
+  // endsWith tests
+  test("Should throw error if string does not end with specified substring", () => {
+    const schema = ryu.string().endsWith("World");
+    expect(() => schema.parse("HelloWorlds")).toThrow("String must end with World");
+  });
+
+  test("Should pass if string ends with specified substring", () => {
+    const schema = ryu.string().endsWith("World");
+    expect(schema.parse("HelloWorld")).toBe("HelloWorld");
+  });
+
+  test("Should use custom error message for endsWith()", () => {
+    const schema = ryu.string().endsWith("End", "Must end with End!");
+    expect(() => schema.parse("Hello")).toThrow("Must end with End!");
+  });
+
   // Constraints test
   test("Should throw when using min() after length()", () => {
     const schema = ryu.string().length(3);
@@ -89,5 +137,13 @@ describe("RyuString Schema", () => {
     expect(() => schema.parse("a")).toThrow("String must have 2 characters");
     expect(() => schema.parse("abcde")).toThrow("String must be less than 4 characters");
     expect(schema.parse("abc")).toBe("abc");
+  });
+
+  test("Should enforce multiple string content constraints simultaneously", () => {
+    const schema = ryu.string().includes("Ry").startsWith("R").endsWith("u");
+    expect(() => schema.parse("ryu")).toThrow("String must include Ry");
+    expect(() => schema.parse("Yu")).toThrow("String must include Ry");
+    expect(() => schema.parse("Ry")).toThrow("String must end with u");
+    expect(schema.parse("Ryu")).toBe("Ryu");
   });
 });
