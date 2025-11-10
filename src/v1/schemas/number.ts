@@ -17,6 +17,7 @@ export class RyuNum extends RyuSchema<number> {
 
   positive() {
     this._positive = true;
+    return this;
   };
 
   parse(data: unknown): number {
