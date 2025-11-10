@@ -1,5 +1,4 @@
-import { RyuNum, RyuString } from "./v1/schema";
-import { RyuObj } from "./v1/schemas/object";
+import { RyuNum, RyuString, RyuObj } from "./v1/schema.js";
 
 export const ryu = {
   string: () => new RyuString(),

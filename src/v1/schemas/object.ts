@@ -1,4 +1,4 @@
-import { RyuSchema } from "..";
+import { RyuSchema } from "../index.js";
 
 export class RyuObj<T extends Record<string, RyuSchema<any>>> extends RyuSchema<
   { [K in keyof T]: ReturnType<T[K]["parse"]> }

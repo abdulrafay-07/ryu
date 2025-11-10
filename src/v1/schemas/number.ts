@@ -1,4 +1,4 @@
-import { RyuSchema } from "..";
+import { RyuSchema } from "../index.js";
 
 export class RyuNum extends RyuSchema<number> {
   private _min?: number;

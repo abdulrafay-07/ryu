@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { ryu } from "../..";
+import { ryu } from "../../index.js";
 
 describe("RyuString Schema", () => {
   // Basic behaviour

@@ -1,4 +1,4 @@
-import { RyuSchema } from "..";
+import { RyuSchema } from "../index.js";
 
 type RyuStringSchemaState = "empty" | "rangeSet" | "lengthSet";
 
