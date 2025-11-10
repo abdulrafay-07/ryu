@@ -7,17 +7,17 @@ Ryu is a minimal, type-safe validation library inspired by **Zod**, built for le
 ## Installation
 
 ```bash
-bun add ryu
+bun add ryu-ts
 # or
-npm install ryu
+npm install ryu-ts
 # or
-pnpm add ryu
+pnpm add ryu-ts
 ```
 
 ## Usage
 
 ```bash
-import { ryu } from "ryu";
+import { ryu } from "ryu-ts";
 
 // Define a schema
 const schema = ryu.object({
