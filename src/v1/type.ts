@@ -1,3 +1,5 @@
+import type { RyuSchema } from "./index.js";
+
 export type RyuError = {
   code: number;
   message: string;
@@ -10,3 +12,5 @@ export type RyuSafeParseResult<T> = {
   success: boolean;
   error: RyuError | null;
 };
+
+export type RyuInfer<T extends RyuSchema<any>> = T extends RyuSchema<infer U> ? U : never;

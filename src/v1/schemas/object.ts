@@ -22,6 +22,6 @@ export class RyuObj<T extends Record<string, RyuSchema<any>>> extends RyuSchema<
       };
     };
 
-    return result;
+    return result as { [K in keyof T]: T[K] extends RyuSchema<infer U> ? U : never };
   };
 };
