@@ -1,4 +1,5 @@
 import { RyuSchema } from "../index.js";
+import type { RyuError } from "../type.js";
 
 type RyuStringSchemaState = "empty" | "rangeSet" | "lengthSet";
 
@@ -14,6 +15,8 @@ type LengthMethod<State extends RyuStringSchemaState> = State extends "rangeSet"
   : (len: number, errorMsg?: string) => RyuString<"lengthSet">;
 
 export class RyuString<State extends RyuStringSchemaState = "empty"> extends RyuSchema<string> {
+  _isRootPrimitive = true;
+
   private constraintType?: "range" | "length";
   private _min?: { val?: number; errorMsg: string; };
   private _max?: { val?: number; errorMsg: string; };
@@ -217,18 +220,26 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
     * @example
     * ```ts
     * const schema = ryu.string().min(3).includes("ry");
-    * schema.parse("Ryu"); // ✅ "Ryu"
-    * schema.parse("Yu"); // ❌ Error: String must include ry
+    * schema.parse("Ryu"); // "Ryu"
+    * schema.parse("Yu"); // Error: String must include ry
     * ```
     */
-  parse(data: unknown): string {
-    if (typeof data !== "string") throw new Error("Expected string");
-    if (this._min && data.length < this._min.val!) throw new Error(this._min.errorMsg);
-    if (this._max && data.length > this._max.val!) throw new Error(this._max.errorMsg);
-    if (this._length && data.length !== this._length.val) throw new Error(this._length.errorMsg);
-    if (this._includes && !data.includes(this._includes.val!)) throw new Error(this._includes.errorMsg);
-    if (this._startsWith && !data.startsWith(this._startsWith.val!)) throw new Error(this._startsWith.errorMsg);
-    if (this._endsWith && !data.endsWith(this._endsWith.val!)) throw new Error(this._endsWith.errorMsg);
+  parse(data: unknown, path: (string | number)[] = ["value"]): string {
+    if (typeof data !== "string")
+      throw { code: 1, message: "Expected string", path, stack: new Error().stack } as RyuError;
+
+    if (this._min && data.length < this._min.val!)
+      throw { code: 1, message: this._min.errorMsg, path, stack: new Error().stack } as RyuError;
+    if (this._max && data.length > this._max.val!)
+      throw { code: 1, message: this._max.errorMsg, path, stack: new Error().stack } as RyuError;
+    if (this._length && data.length !== this._length.val)
+      throw { code: 1, message: this._length.errorMsg, path, stack: new Error().stack } as RyuError;
+    if (this._includes && !data.includes(this._includes.val!))
+      throw { code: 1, message: this._includes.errorMsg, path, stack: new Error().stack } as RyuError;
+    if (this._startsWith && !data.startsWith(this._startsWith.val!))
+      throw { code: 1, message: this._startsWith.errorMsg, path, stack: new Error().stack } as RyuError;
+    if (this._endsWith && !data.endsWith(this._endsWith.val!))
+      throw { code: 1, message: this._endsWith.errorMsg, path, stack: new Error().stack } as RyuError;
 
     return data;
   };
