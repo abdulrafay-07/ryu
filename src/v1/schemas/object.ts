@@ -1,4 +1,5 @@
 import { RyuSchema } from "../index.js";
+import type { RyuError } from "../type.js";
 
 export class RyuObj<T extends Record<string, RyuSchema<any>>> extends RyuSchema<
   { [K in keyof T]: T[K] extends RyuSchema<infer U> ? U : never }
@@ -8,7 +9,7 @@ export class RyuObj<T extends Record<string, RyuSchema<any>>> extends RyuSchema<
   };
 
   parse(data: unknown, path: (string | number)[] = []) {
-    if (typeof data !== "object" || !data) throw { message: "Expected object", path: [ "value" ], stack: new Error().stack };
+    if (typeof data !== "object" || !data) throw { code: 1, message: "Expected object", path: [ "value" ], stack: new Error().stack } as RyuError;
 
     const result: any = {};
     for (const key in this.shape) {
