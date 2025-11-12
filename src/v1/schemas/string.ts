@@ -24,6 +24,8 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
   private _includes?: { val?: string; errorMsg: string };
   private _startsWith?: { val?: string; errorMsg: string };
   private _endsWith?: { val?: string; errorMsg: string };
+  private _email?: { regex: RegExp; errorMsg: string };
+  private _url?: { regex: RegExp; errorMsg: string };
 
   // Compile time type signatures
 
@@ -89,7 +91,8 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
   };
 
   private _minImpl(len: number, errorMsg?: string): RyuString<"rangeSet"> {
-    if (this.constraintType === "length") throw new Error("Cannot use min() when a fixed length() has already been set.");
+    if (this.constraintType === "length")
+      throw { code: 2, message: "Cannot use min() when a fixed length() has already been set.", path: [], stack: new Error().stack } as RyuError;
     this.constraintType = "range";
 
     if (!this._min) this._min = { errorMsg: "" };
@@ -103,7 +106,8 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
   };
 
   private _maxImpl(len: number, errorMsg?: string): RyuString<"rangeSet"> {
-    if (this.constraintType === "length") throw new Error("Cannot use max() when a fixed length() has already been set.");
+    if (this.constraintType === "length")
+      throw { code: 2, message: "Cannot use max() when a fixed length() has already been set.", path: [], stack: new Error().stack } as RyuError;
     this.constraintType = "range";
 
     if (!this._max) this._max = { errorMsg: "" };
@@ -117,7 +121,8 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
   };
 
   private _lengthImpl(len: number, errorMsg?: string): RyuString<"lengthSet"> {
-    if (this.constraintType === "range") throw new Error("Cannot use length() when min() or max() has already been set.");
+    if (this.constraintType === "range")
+      throw { code: 2, message: "Cannot use length() when min() or max() has already been set.", path: [], stack: new Error().stack } as RyuError;
     this.constraintType = "length";
 
     if (!this._length) this._length = { errorMsg: "" };
@@ -202,6 +207,24 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
     return this;
   };
 
+  email(errorMsg?: string) {
+    this._email = {
+      regex: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      errorMsg: errorMsg ?? "Invalid email",
+    };
+
+    return this;
+  };
+
+  url(errorMsg?: string) {
+    this._url = {
+      regex: /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w-./?%&=]*)?$/,
+      errorMsg: errorMsg ?? "Invalid url",
+    };
+
+    return this;
+  };
+
   /**
     * Validates the provided input against all defined string constraints.
     *
@@ -240,6 +263,10 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
       throw { code: 1, message: this._startsWith.errorMsg, path, stack: new Error().stack } as RyuError;
     if (this._endsWith && !data.endsWith(this._endsWith.val!))
       throw { code: 1, message: this._endsWith.errorMsg, path, stack: new Error().stack } as RyuError;
+    if (this._email && !this._email.regex.test(data))
+      throw { code: 1, message: this._email.errorMsg, path, stack: new Error().stack } as RyuError;
+    if (this._url && !this._url.regex.test(data))
+      throw { code: 1, message: this._url.errorMsg, path, stack: new Error().stack } as RyuError;
 
     return data;
   };
