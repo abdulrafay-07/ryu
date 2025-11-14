@@ -8,7 +8,7 @@ export class RyuObj<T extends Record<string, RyuSchema<any>>> extends RyuSchema<
     super();
   };
 
-  parse(data: unknown, path: (string | number)[] = []) {
+  internalParse(data: unknown, path: (string | number)[] = []) {
     if (typeof data !== "object" || !data) throw { code: 1, message: "Expected object", path: [ "value" ], stack: new Error().stack } as RyuError;
 
     const result: any = {};

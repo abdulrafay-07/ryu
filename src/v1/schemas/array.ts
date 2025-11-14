@@ -14,7 +14,7 @@ export class RyuArr<T extends RyuSchema<any>> extends RyuSchema<
     this._errorMsg = errorMsg ?? "Expected array";
   };
 
-  parse(data: unknown, path: (string | number)[] = [ "value" ]) {
+  internalParse(data: unknown, path: (string | number)[] = [ "value" ]) {
     if (!Array.isArray(data)) throw { code: 1, message: this._errorMsg, path, stack: new Error().stack } as RyuError;
 
     const result = data.map((v, i) => {

@@ -247,7 +247,7 @@ export class RyuString<State extends RyuStringSchemaState = "empty"> extends Ryu
     * schema.parse("Yu"); // Error: String must include ry
     * ```
     */
-  parse(data: unknown, path: (string | number)[] = [ "value" ]): string {
+  internalParse(data: unknown, path: (string | number)[] = [ "value" ]): string {
     if (typeof data !== "string")
       throw { code: 1, message: "Expected string", path, stack: new Error().stack } as RyuError;
 

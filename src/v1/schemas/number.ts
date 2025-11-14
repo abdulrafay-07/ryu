@@ -156,7 +156,7 @@ export class RyuNum<State extends RyuNumSchemaState = "empty"> extends RyuSchema
     * schema.parse(-4); // Error: Should be positive
     * ```
     */
-  parse(data: unknown, path: (string | number)[] = [ "value" ]): number {
+  internalParse(data: unknown, path: (string | number)[] = [ "value" ]): number {
     if (typeof data !== "number")
       throw { code: 1, message: "Expected number", path, stack: new Error().stack } as RyuError;
 

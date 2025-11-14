@@ -96,7 +96,7 @@ export class RyuBool<State extends RyuBoolSchemaState = "empty"> extends RyuSche
     * schema.parse(false); // Error: Should be true
     * ```
     */
-  parse(data: unknown, path: (string | number)[] = [ "value" ]): boolean {
+  internalParse(data: unknown, path: (string | number)[] = [ "value" ]): boolean {
     if (typeof data !== "boolean")
       throw { code: 1, message: "Expected boolean", path, stack: new Error().stack } as RyuError;
     if (this._true && data !== true)
