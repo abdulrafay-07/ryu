@@ -1,6 +1,6 @@
 {
   "name": "ryu-ts",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A lightweight TypeScript-first validation library inspired by Zod.",
   "author": "Abdul Rafay Aslam",
   "license": "MIT",

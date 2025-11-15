@@ -5,11 +5,13 @@ export abstract class RyuSchema<T> {
 
   protected abstract internalParse(data: unknown, path?: (string | number)[]): T;
 
-  optional(): RyuSchema<T | undefined> {
+  optional(): Omit<RyuSchema<T | undefined>, "optional"> {
+    if (this._optional) throw new Error("Already optional");
+
     const clone = Object.create(this) as RyuSchema<T | undefined>;
     clone._optional = true;
 
-    return clone;
+    return clone as Omit<RyuSchema<T | undefined>, "optional">;
   };
 
   parse(data?: unknown, path: (string | number)[] = []): T | undefined {
